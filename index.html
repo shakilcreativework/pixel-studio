@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pixel & Vector Creative Suite — Professional Image to Pixel Art & Halftone Generator</title>
+  <meta name="description" content="Production-grade client-side creative image processing suite. Convert images to Pixel Art, Halftone, Line Art, Random Flow, Camo Mesh, and Mosaic with true vector SVG and crisp PNG export.">
+  <link rel="stylesheet" href="/src/styles/index.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="app-header">
+      <!-- Left: Sidebar toggle + Logo section -->
+      <div class="header-left">
+        <button class="btn btn-icon-only sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Controls Sidebar" title="Toggle Controls Sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <div class="logo-section">
+          <div class="logo-badge" title="Pixel Studio">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/>
+            </svg>
+            <span class="logo-text">PIXEL STUDIO</span>
+          </div>
+          <h1 class="app-title">Creative Vector Suite</h1>
+        </div>
+      </div>
+
+      <!-- Center: Mode Selector with scroll controls -->
+      <div class="mode-selector-wrapper">
+        <button class="mode-scroll-btn mode-scroll-prev" id="modeScrollPrev" aria-label="Scroll modes left" title="Scroll left">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <nav class="mode-selector-bar" id="modeSelector" role="tablist" aria-label="Processing Engines">
+          <button class="mode-btn active" data-mode="pixel-art" role="tab" id="tab-pixel-art" title="Fixed-grid pixel art engine with custom palettes and dithering">
+            <svg class="mode-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 3h6v6H3V3zm12 0h6v6h-6V3zM3 15h6v6H3v-6zm12 0h6v6h-6v-6zM9 9h6v6H9V9z"/>
+            </svg>
+            <span class="mode-label">Pixel Art</span>
+          </button>
+          <button class="mode-btn" data-mode="halftone" role="tab" id="tab-halftone" title="Halftone dot grid generator">
+            <svg class="mode-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="5" cy="5" r="2.5"/><circle cx="12" cy="5" r="3.5"/><circle cx="19" cy="2.5"/>
+              <circle cx="5" cy="12" r="3.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="19" cy="12" r="3.5"/>
+              <circle cx="5" cy="19" r="2.5"/><circle cx="12" cy="19" r="3.5"/><circle cx="19" cy="19" r="2.5"/>
+            </svg>
+            <span class="mode-label">Halftone</span>
+          </button>
+          <button class="mode-btn" data-mode="line-art" role="tab" id="tab-line-art" title="Edge detection and line art generator">
+            <svg class="mode-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              <path d="M2 2l7.586 7.586"></path>
+              <circle cx="11" cy="11" r="2"></circle>
+            </svg>
+            <span class="mode-label">Line Art</span>
+          </button>
+          <button class="mode-btn" data-mode="random-flow" role="tab" id="tab-random-flow" title="Noise-guided particle flow field">
+            <svg class="mode-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 6c4-3 8-3 12 0s8 3 12 0"/>
+              <path d="M2 12c4-3 8-3 12 0s8 3 12 0"/>
+              <path d="M2 18c4-3 8-3 12 0s8 3 12 0"/>
+            </svg>
+            <span class="mode-label">Random Flow</span>
+          </button>
+          <button class="mode-btn" data-mode="camo-mesh" role="tab" id="tab-camo-mesh" title="Organic cellular camo mesh generator">
+            <svg class="mode-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="6 2 18 2 22 8 18 14 6 14 2 8 6 2"/>
+              <polygon points="6 14 18 14 22 20 18 22 6 22 2 20 6 14"/>
+            </svg>
+            <span class="mode-label">Camo Mesh</span>
+          </button>
+          <button class="mode-btn" data-mode="mosaic" role="tab" id="tab-mosaic" title="Geometric mosaic artwork generator">
+            <svg class="mode-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span class="mode-label">Mosaic</span>
+          </button>
+          <button class="mode-btn" data-mode="pencil" role="tab" id="tab-pencil" title="Freehand drawing and vector annotations">
+            <svg class="mode-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+            </svg>
+            <span class="mode-label">Pencil</span>
+          </button>
+        </nav>
+        <button class="mode-scroll-btn mode-scroll-next" id="modeScrollNext" aria-label="Scroll modes right" title="Scroll right">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Right: Action Buttons -->
+      <div class="header-actions">
+        <button class="btn btn-icon-only" id="undoBtn" aria-label="Undo" title="Undo (Ctrl+Z)" disabled>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7v6h6"/>
+            <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/>
+          </svg>
+        </button>
+        <button class="btn btn-icon-only" id="redoBtn" aria-label="Redo" title="Redo (Ctrl+Shift+Z)" disabled>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 7v6h-6"/>
+            <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/>
+          </svg>
+        </button>
+
+        <!-- Desktop Action Buttons -->
+        <button class="btn nav-desktop-action" id="safeCheckBtn" title="Marketplace Safe Check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          <span class="nav-action-text">Safe Check</span>
+        </button>
+
+        <button class="btn nav-desktop-action" id="splitViewBtn" title="Toggle Before / After Split View">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="12" y1="3" x2="12" y2="21"/>
+          </svg>
+          <span class="nav-action-text">Split View</span>
+        </button>
+
+        <button class="btn nav-desktop-action" id="saveProjectBtn" title="Save Project File (.pixelart)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span class="nav-action-text">Save</span>
+        </button>
+
+        <label class="btn nav-desktop-action" id="loadProjectLabel" title="Open Project File (.pixelart)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="nav-action-text">Open</span>
+          <input type="file" id="projectFileInput" accept=".pixelart,.json" style="display: none;">
+        </label>
+
+        <!-- Overflow Menu Trigger for Tablet/Mobile/Narrow Desktop -->
+        <div class="overflow-menu-container" id="overflowMenuContainer">
+          <button class="btn btn-icon-only" id="overflowMenuBtn" aria-label="More Actions" title="More Actions">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
+            </svg>
+          </button>
+          <div class="overflow-dropdown" id="overflowDropdown">
+            <button class="overflow-item" id="overflowSafeCheckBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
+              </svg>
+              <span>Marketplace Safe Check</span>
+            </button>
+            <button class="overflow-item" id="overflowSplitViewBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="3" x2="12" y2="21"/>
+              </svg>
+              <span>Toggle Split View</span>
+            </button>
+            <button class="overflow-item" id="overflowSaveProjectBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+              </svg>
+              <span>Save Project (.pixelart)</span>
+            </button>
+            <label class="overflow-item" id="overflowOpenProjectLabel">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>Open Project (.pixelart)</span>
+              <input type="file" id="overflowProjectFileInput" accept=".pixelart,.json" style="display: none;">
+            </label>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="exportModalBtn" title="Export PNG, JPEG or True Vector SVG">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span class="export-btn-label">Export</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-workspace">
+      <!-- Sidebar Drawer Backdrop -->
+      <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+      <!-- Left Sidebar: Controls -->
+      <aside class="app-sidebar" id="sidebar">
+        <!-- Mobile Drawer Header -->
+        <div class="drawer-header">
+          <div class="drawer-title-group">
+            <span class="drawer-icon">⚙️</span>
+            <h2 class="drawer-title">Controls & Artboard</h2>
+          </div>
+          <button class="btn btn-icon-only drawer-close-btn" id="sidebarCloseBtn" aria-label="Close Settings Drawer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Image Upload Section -->
+        <section class="sidebar-section">
+          <div class="section-header">
+            <span class="section-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              Source Image
+            </span>
+            <button class="btn btn-icon-only" id="demoImageBtn" title="Load Sample Artwork">Demo</button>
+          </div>
+          <div class="dropzone" id="dropzone">
+            <div class="dropzone-empty" id="dropzoneEmpty">
+              <div class="dropzone-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+              </div>
+              <div class="dropzone-text">Drop image here or click to browse</div>
+              <div class="dropzone-subtext">JPG, PNG, WebP up to 25MB (Local processing)</div>
+            </div>
+            <div class="dropzone-preview" id="dropzonePreview" style="display: none;">
+              <div class="dropzone-thumb-wrapper">
+                <img id="dropzoneImg" class="dropzone-img" src="" alt="Source preview" />
+              </div>
+              <div class="dropzone-filename" id="dropzoneFileName">avatar.jpg</div>
+              <div class="dropzone-change-hint">Click or drop to replace</div>
+            </div>
+            <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+          </div>
+        </section>
+
+        <!-- Document & Artboard Size System -->
+        <section class="sidebar-section">
+          <div class="section-header">
+            <span class="section-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 3H3v18h18V3z"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+              Document Artboard
+            </span>
+            <span class="section-badge" id="docDimsBadge">1024 × 576</span>
+          </div>
+          <div class="control-group">
+            <div class="control-label-row">
+              <span class="control-label">Document Size Preset</span>
+            </div>
+            <select id="docPresetSelect">
+              <option value="original" selected>Match Uploaded Source Dimensions</option>
+              <optgroup label="Common Landscape">
+                <option value="landscape-1024">1024 × 576 (16:9 Landscape)</option>
+                <option value="landscape-1280">1280 × 720 (HD 720p)</option>
+                <option value="landscape-1366">1366 × 768 (Laptop Standard)</option>
+                <option value="landscape-1536">1536 × 864 (QHD Lite)</option>
+                <option value="landscape-1920">1920 × 1080 (Full HD 1080p)</option>
+                <option value="landscape-2560">2560 × 1440 (2K QHD)</option>
+                <option value="landscape-3440">3440 × 1440 (UWQHD Ultra-Wide)</option>
+                <option value="landscape-3840">3840 × 2160 (4K UHD)</option>
+                <option value="landscape-4096">4096 × 2160 (Cinema 4K DCI)</option>
+                <option value="landscape-5120">5120 × 2880 (5K Retina Display)</option>
+                <option value="landscape-6016">6016 × 3384 (6K Pro Display XDR)</option>
+                <option value="landscape-7680">7680 × 4320 (8K Ultra HD Master)</option>
+              </optgroup>
+              <optgroup label="Common Portrait">
+                <option value="portrait-576">576 × 1024 (9:16 Portrait)</option>
+                <option value="portrait-720">720 × 1280 (HD Portrait)</option>
+                <option value="portrait-768">768 × 1366 (Tall Display)</option>
+                <option value="portrait-864">864 × 1536 (Story Medium)</option>
+                <option value="portrait-1080">1080 × 1920 (Mobile / Story HD)</option>
+                <option value="portrait-1440">1440 × 2560 (2K Vertical)</option>
+                <option value="portrait-2160">2160 × 3840 (4K Vertical UHD)</option>
+                <option value="portrait-2880">2880 × 5120 (5K Vertical UHD)</option>
+                <option value="portrait-4320">4320 × 7680 (8K Vertical Ultra HD)</option>
+              </optgroup>
+              <optgroup label="Square Dimensions">
+                <option value="square-512">512 × 512 (Icon / Avatar)</option>
+                <option value="square-768">768 × 768 (Square Medium)</option>
+                <option value="square-1024">1024 × 1024 (1:1 Artboard Standard)</option>
+                <option value="square-1536">1536 × 1536 (High Res Square)</option>
+                <option value="square-2048">2048 × 2048 (2K Square Master)</option>
+                <option value="square-3072">3072 × 3072 (3K High Precision Square)</option>
+                <option value="square-4096">4096 × 4096 (4K Ultra Square)</option>
+                <option value="square-6144">6144 × 6144 (6K Master Square)</option>
+                <option value="square-8192">8192 × 8192 (8K Ultra Master Square)</option>
+              </optgroup>
+              <optgroup label="High-Res Print & Poster (300 DPI)">
+                <option value="print-a4-portrait">A4 Print Portrait (2480 × 3508 - 300 DPI)</option>
+                <option value="print-a4-landscape">A4 Print Landscape (3508 × 2480 - 300 DPI)</option>
+                <option value="print-a3-portrait">A3 Print Portrait (3508 × 4960 - 300 DPI)</option>
+                <option value="print-a3-landscape">A3 Print Landscape (4960 × 3508 - 300 DPI)</option>
+                <option value="print-poster-4-5">Poster 8×10 Hi-Res (2400 × 3000 - 300 DPI)</option>
+                <option value="print-poster-4-3">Poster 12×16 Hi-Res (3600 × 4800 - 300 DPI)</option>
+              </optgroup>
+              <optgroup label="Social & Creative Presets">
+                <option value="social-ig-square">Instagram Post (1080 × 1080)</option>
+                <option value="social-ig-story">Instagram Story / Reel (1080 × 1920)</option>
+                <option value="social-ig-portrait">Instagram Portrait 4:5 (1080 × 1350)</option>
+                <option value="social-yt-thumb">YouTube Thumbnail (1280 × 720)</option>
+                <option value="social-yt-banner">YouTube Channel Art (2560 × 1440)</option>
+                <option value="social-yt-4k">YouTube 4K Banner (3840 × 2160)</option>
+                <option value="social-fb-post">Facebook Post (1200 × 630)</option>
+                <option value="social-twitter-post">X / Twitter Post (1200 × 675)</option>
+                <option value="social-pinterest-pin">Pinterest Pin 2:3 (1000 × 1500)</option>
+                <option value="social-tiktok">TikTok Video (1080 × 1920)</option>
+                <option value="social-tiktok-4k">TikTok / Reel 4K Vertical (2160 × 3840)</option>
+                <option value="social-dribbble-hd">Dribbble / Behance Shot HD (2800 × 2100)</option>
+              </optgroup>
+              <optgroup label="AI / Image Generation Aspect Ratios">
+                <option value="ai-1-1">AI 1:1 Square (1024 × 1024)</option>
+                <option value="ai-hd-1-1">AI HD 1:1 Square (2048 × 2048)</option>
+                <option value="ai-4-3">AI 4:3 Standard (1152 × 864)</option>
+                <option value="ai-3-4">AI 3:4 Vertical (864 × 1152)</option>
+                <option value="ai-3-2">AI 3:2 Photo (1200 × 800)</option>
+                <option value="ai-2-3">AI 2:3 Tall Photo (800 × 1200)</option>
+                <option value="ai-16-9">AI 16:9 Cinema (1344 × 768)</option>
+                <option value="ai-hd-16-9">AI HD 16:9 Cinema (2688 × 1536)</option>
+                <option value="ai-9-16">AI 9:16 Vertical (768 × 1344)</option>
+                <option value="ai-hd-9-16">AI HD 9:16 Tall (1536 × 2688)</option>
+                <option value="ai-5-4">AI 5:4 Format (1280 × 1024)</option>
+                <option value="ai-4-5">AI 4:5 Social (1024 × 1280)</option>
+                <option value="ai-21-9">AI 21:9 Ultra-Wide (1536 × 640)</option>
+                <option value="ai-hd-21-9">AI HD 21:9 Ultra-Wide (2560 × 1080)</option>
+              </optgroup>
+              <option value="custom">Custom Dimensions...</option>
+            </select>
+          </div>
+
+          <!-- Custom Dimensions Row -->
+          <div id="customSizeRow" style="display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+            <div>
+              <div class="control-label-row"><span class="control-label">Width (px)</span></div>
+              <input type="number" id="customWidthInput" min="16" max="8192" value="1024">
+            </div>
+            <div>
+              <div class="control-label-row"><span class="control-label">Height (px)</span></div>
+              <input type="number" id="customHeightInput" min="16" max="8192" value="1024">
+            </div>
+          </div>
+        </section>
+
+        <!-- Dedicated Background & Presentation Section -->
+        <section class="sidebar-section">
+          <div class="section-header">
+            <span class="section-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+                <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+                <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+                <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+              </svg>
+              Canvas Background
+            </span>
+          </div>
+          <div class="control-group">
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; cursor: pointer;">
+              <input type="checkbox" id="sidebarTransparentBg" checked style="width: 18px; height: 18px; accent-color: var(--accent-primary);">
+              Transparent Background (Default)
+            </label>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+              Artwork only. Zero background rectangle in exported SVG/PNG.
+            </div>
+          </div>
+          <!-- Background Color control (visible when transparent is unchecked) -->
+          <div class="control-group" id="bgColorControlGroup" style="display: none; margin-top: 10px;">
+            <div class="control-label-row">
+              <span class="control-label">Background Color</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <input type="color" id="sidebarBgColorPicker" value="#ffffff" style="width: 44px; height: 36px; padding: 2px; border-radius: var(--radius-sm); cursor: pointer;">
+              <button class="btn" id="setWhiteBgBtn" style="font-size: 11px; padding: 6px 10px;">White</button>
+              <button class="btn" id="setBlackBgBtn" style="font-size: 11px; padding: 6px 10px;">Black</button>
+              <button class="btn" id="setDarkObsidianBgBtn" style="font-size: 11px; padding: 6px 10px;">Dark</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dynamic Engine Controls Container -->
+        <div id="engineControlsContainer">
+          <!-- Pixel Art Controls Panel -->
+          <div class="engine-panel" id="panel-pixel-art">
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Pixel Grid</span>
+                <span class="section-badge">Fixed Grid</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Grid Resolution</span>
+                  <span class="control-value" id="resVal">512 px</span>
+                </div>
+                <select id="resPresetSelect" style="margin-bottom: 8px;">
+                  <option value="8">8 × 8 (8 px)</option>
+                  <option value="16">16 × 16 (16 px)</option>
+                  <option value="32">32 × 32 (32 px)</option>
+                  <option value="64">64 × 64 (64 px)</option>
+                  <option value="128">128 × 128 (128 px)</option>
+                  <option value="256">256 × 256 (256 px)</option>
+                  <option value="512" selected>512 × 512 (512 px)</option>
+                  <option value="custom">Custom</option>
+                </select>
+                <input type="range" id="resSlider" min="8" max="512" step="8" value="512">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Color Sampling</span>
+                  <span class="control-value" id="samplingVal">OKLab Perceptual</span>
+                </div>
+                <select id="samplingSelect">
+                  <option value="perceptual" selected>Perceptual Average (OKLab)</option>
+                  <option value="average">Arithmetic Average</option>
+                  <option value="median">Median Channel</option>
+                  <option value="dominant">Dominant Frequency</option>
+                </select>
+              </div>
+            </section>
+
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Color & Palette</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Color Mode</span>
+                  <span class="control-value" id="colorModeVal">Limited Palette</span>
+                </div>
+                <select id="colorModeSelect">
+                  <option value="limited" selected>Limited Palette (Median-Cut Quantization)</option>
+                  <option value="preset">Retro Palette Presets</option>
+                  <option value="original">Original Sampled Colors</option>
+                  <option value="monochrome">1-Bit Monochrome</option>
+                </select>
+              </div>
+
+              <!-- Preset selector -->
+              <div class="control-group" id="presetSelectGroup" style="display: none;">
+                <div class="control-label-row">
+                  <span class="control-label">Palette Preset</span>
+                </div>
+                <select id="presetSelect">
+                  <option value="pico-8">PICO-8 (16 Colors)</option>
+                  <option value="gameboy">Game Boy (4 Colors)</option>
+                  <option value="monochrome">1-Bit Monochrome (2 Colors)</option>
+                  <option value="cyberpunk">Cyberpunk Neon (16 Colors)</option>
+                  <option value="c64">Commodore 64 (16 Colors)</option>
+                  <option value="pastel">Pastel Dreams (16 Colors)</option>
+                  <option value="solar8">Solar 8 (8 Colors)</option>
+                  <option value="endesga32">EDG 32 (32 Colors)</option>
+                </select>
+              </div>
+
+              <!-- Palette size slider for limited mode -->
+              <div class="control-group" id="paletteSizeGroup">
+                <div class="control-label-row">
+                  <span class="control-label">Palette Colors</span>
+                  <span class="control-value" id="paletteSizeVal">32</span>
+                </div>
+                <input type="range" id="paletteSizeSlider" min="2" max="128" step="2" value="32">
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Active Palette Swatches</span>
+                  <span class="control-value" id="paletteCountVal">0 colors</span>
+                </div>
+                <div class="palette-grid" id="paletteSwatchesGrid"></div>
+              </div>
+            </section>
+
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Dithering Engine</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Dithering Algorithm</span>
+                </div>
+                <select id="ditheringSelect">
+                  <option value="none" selected>None (Clean / Solid)</option>
+                  <option value="bayer4">Bayer 4×4 (Ordered Matrix)</option>
+                  <option value="bayer2">Bayer 2×2 (Compact)</option>
+                  <option value="bayer8">Bayer 8×8 (Fine Ordered)</option>
+                  <option value="floyd-steinberg">Floyd-Steinberg (Error Diffusion)</option>
+                  <option value="atkinson">Atkinson (High Contrast Mac Classic)</option>
+                  <option value="random">Random Noise Diffusion</option>
+                </select>
+              </div>
+              <div class="control-group" id="ditherStrengthGroup" style="display: none;">
+                <div class="control-label-row">
+                  <span class="control-label">Dither Strength</span>
+                  <span class="control-value" id="ditherStrengthVal">100%</span>
+                </div>
+                <input type="range" id="ditherStrengthSlider" min="10" max="100" step="5" value="100">
+              </div>
+            </section>
+          </div>
+
+          <!-- Halftone Controls Panel -->
+          <div class="engine-panel" id="panel-halftone" style="display: none;">
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Halftone Grid</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row"><span class="control-label">Grid Type</span></div>
+                <select id="htGridTypeSelect">
+                  <option value="square" selected>Square Grid</option>
+                  <option value="hexagonal">Hexagonal / Honeycomb</option>
+                  <option value="radial">Radial Rings</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Grid Spacing</span>
+                  <span class="control-value" id="htSpacingVal">12 px</span>
+                </div>
+                <input type="range" id="htSpacingSlider" min="4" max="36" step="1" value="12">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Grid Angle</span>
+                  <span class="control-value" id="htAngleVal">45°</span>
+                </div>
+                <input type="range" id="htAngleSlider" min="0" max="90" step="5" value="45">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Max Dot Radius</span>
+                  <span class="control-value" id="htRadiusVal">6 px</span>
+                </div>
+                <input type="range" id="htRadiusSlider" min="1" max="24" step="0.5" value="6">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row"><span class="control-label">Dot Shape</span></div>
+                <select id="htShapeSelect">
+                  <option value="circle" selected>Circle</option>
+                  <option value="square">Square</option>
+                  <option value="diamond">Diamond</option>
+                  <option value="hexagon">Hexagon</option>
+                  <option value="triangle">Triangle</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                  <input type="checkbox" id="htHollowCheckbox" style="width: auto;">
+                  Hollow Strokes Only
+                </label>
+              </div>
+              <div class="control-group">
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                  <input type="checkbox" id="htInvertCheckbox" style="width: auto;">
+                  Invert Luminance
+                </label>
+              </div>
+            </section>
+          </div>
+
+          <!-- Line Art Controls Panel -->
+          <div class="engine-panel" id="panel-line-art" style="display: none;">
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Line Art Settings</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Edge Sensitivity</span>
+                  <span class="control-value" id="laSensitivityVal">50</span>
+                </div>
+                <input type="range" id="laSensitivitySlider" min="5" max="95" step="1" value="50">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Line Thickness</span>
+                  <span class="control-value" id="laThicknessVal">1 px</span>
+                </div>
+                <input type="range" id="laThicknessSlider" min="1" max="5" step="1" value="1">
+              </div>
+              <div class="control-group">
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                  <input type="checkbox" id="laInvertCheckbox" style="width: auto;">
+                  Invert Colors (Dark Mode)
+                </label>
+              </div>
+            </section>
+          </div>
+
+          <!-- Random Flow Controls Panel -->
+          <div class="engine-panel" id="panel-random-flow" style="display: none;">
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Random Flow Settings</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Particle Count</span>
+                  <span class="control-value" id="rfCountVal">1200</span>
+                </div>
+                <input type="range" id="rfCountSlider" min="200" max="3000" step="100" value="1200">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Streamline Length</span>
+                  <span class="control-value" id="rfLengthVal">30</span>
+                </div>
+                <input type="range" id="rfLengthSlider" min="10" max="80" step="5" value="30">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Stroke Width</span>
+                  <span class="control-value" id="rfStrokeVal">2 px</span>
+                </div>
+                <input type="range" id="rfStrokeSlider" min="1" max="6" step="1" value="2">
+              </div>
+            </section>
+          </div>
+
+          <!-- Camo Mesh Controls Panel -->
+          <div class="engine-panel" id="panel-camo-mesh" style="display: none;">
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Camo Mesh Settings</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Cellular Regions</span>
+                  <span class="control-value" id="cmRegionsVal">150</span>
+                </div>
+                <input type="range" id="cmRegionsSlider" min="30" max="500" step="10" value="150">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Dot Size</span>
+                  <span class="control-value" id="cmDotSizeVal">14 px</span>
+                </div>
+                <input type="range" id="cmDotSizeSlider" min="4" max="40" step="2" value="14">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Organic Warp</span>
+                  <span class="control-value" id="cmWarpVal">50%</span>
+                </div>
+                <input type="range" id="cmWarpSlider" min="0" max="100" step="5" value="50">
+              </div>
+            </section>
+          </div>
+
+          <!-- Mosaic Controls Panel -->
+          <div class="engine-panel" id="panel-mosaic" style="display: none;">
+            <section class="sidebar-section" id="msCleanEdgeSection">
+              <div class="section-header">
+                <span class="section-title">Clean Edge Purifier</span>
+                <span class="section-badge" id="msCleanEdgeStatus" aria-live="polite">Off</span>
+              </div>
+              <div class="toggle-preset-box">
+                <div class="toggle-preset-info">
+                  <span class="toggle-preset-title">Restore Design Edge Colors</span>
+                  <span class="toggle-preset-subtitle">Replace muddy edge blends with nearby source colors.</span>
+                </div>
+                <label class="switch-toggle" title="Restore edge colors on a flat background without changing tile shapes">
+                  <input type="checkbox" id="msCleanEdgeToggle" aria-label="Enable Clean Edge Purifier">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <p class="control-hint" style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Both image modes. Keeps main colors, interior shading and manual edits. Turn off to compare the original sampled colors.</p>
+              <button type="button" class="btn" id="msCleanEdgeResetBtn" style="width: 100%; margin-top: 8px;">Reset Edge Colors</button>
+            </section>
+            <section class="sidebar-section" id="msEdgeCleanerSection" style="display: none;">
+              <div class="section-header">
+                <span class="section-title">Edge Cleaner</span>
+                <span class="section-badge" id="msEdgeCleanerStatus" aria-live="polite">Off</span>
+              </div>
+              <div class="toggle-preset-box">
+                <div class="toggle-preset-info">
+                  <span class="toggle-preset-title">Remove Light Fringe</span>
+                  <span class="toggle-preset-subtitle">Delete light-graded edge pixels and dark edge specks outside the design; make them background. Nothing is recolored.</span>
+                </div>
+                <label class="switch-toggle" title="Remove outside-edge pixels that match the pure background; keep only solid design colors">
+                  <input type="checkbox" id="msEdgeCleanerToggle" aria-label="Enable Edge Cleaner fringe removal" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <div style="margin-top: 8px;">
+                <label for="msEdgeCleanerStrengthSlider" style="font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 4px;">
+                  <span>Strength</span><span id="msEdgeCleanerStrengthVal">25%</span>
+                </label>
+                <input type="range" id="msEdgeCleanerStrengthSlider" min="10" max="40" step="1" value="25" title="How close an edge pixel must be to the pure background to be removed. Higher = harder edge removal.">
+              </div>
+              <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between;">
+                <label for="msEdgeCleanerDarkShadingToggle" style="font-size: 11px; color: var(--text-muted);" title="Also remove dark shading/halo at outside edges. Long dark outlines are always kept.">Remove dark edge shading</label>
+                <label class="switch-toggle" style="transform: scale(0.85);">
+                  <input type="checkbox" id="msEdgeCleanerDarkShadingToggle" aria-label="Remove dark edge shading">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <p class="control-hint" style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Already Pixel Art mode. Only outside edges; outlines, highlights, white bark and manual edits are kept. Turn off to compare the original sampled edges.</p>
+            </section>
+            <section class="sidebar-section" id="msColorRestoreSection" style="display: none;">
+              <div class="section-header">
+                <span class="section-title">Color Restore</span>
+                <span class="section-badge" id="msColorRestoreStatus" aria-live="polite">Off</span>
+              </div>
+              <div class="toggle-preset-box">
+                <div class="toggle-preset-info">
+                  <span class="toggle-preset-title">Restore Lost Colors</span>
+                  <span class="toggle-preset-subtitle">Snap stray artifact colors back to the original design palette.</span>
+                </div>
+                <label class="switch-toggle" title="Replace off-palette artifact colors with the nearest true design color across the full grid">
+                  <input type="checkbox" id="msColorRestoreToggle" aria-label="Enable Color Restore" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <div class="control-group" style="margin-top: 8px;">
+                <div class="control-label-row">
+                  <span class="control-label">Match Tolerance</span>
+                  <span class="control-value" id="msColorRestoreTolVal">12</span>
+                </div>
+                <input type="range" id="msColorRestoreTolSlider" min="0" max="48" step="1" value="12">
+              </div>
+              <div class="control-group" style="margin-top: 8px;">
+                <div class="control-label-row">
+                  <span class="control-label">Real Colors Detected</span>
+                  <span class="control-value" id="msRealColorsCount">…</span>
+                </div>
+                <div id="msRealColorsRow" class="real-colors-row" aria-live="polite"></div>
+              </div>
+              <p class="control-hint" style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Already Pixel Art mode. Restores JPEG artifact and blended leftovers across the full grid — the edge purifier handles edges only.</p>
+            </section>
+            <!-- Source Artwork Mode & Pixel Grid Lock Section -->
+            <!-- Source Artwork Mode & Input Classification Section -->
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Artwork Mode</span>
+                <span class="section-badge" id="msSourceModeBadge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald);">🎨 Already Pixel Art</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row"><span class="control-label">Select Feature Mode</span></div>
+                <div class="filter-pill-group" id="msInputModeGroup">
+                  <button type="button" class="filter-pill-btn active" data-input-mode="photo" id="msInputModePhotoBtn" title="Normal Image: Creative generator for photos and illustrations with shading, blending, quantization, and edge controls">📷 Normal Image</button>
+                  <button type="button" class="filter-pill-btn" data-input-mode="pixel-art" id="msInputModePixelArtBtn" title="Already Pixel Art: Pure 1:1 cell and vector conversion. Zero shading, zero blending, zero quantization, zero added edges">🎨 Already Pixel Art</button>
+                </div>
+                
+                <!-- Zero-Loss Mode Banner for Already Pixel Art -->
+                <div id="msZeroLossBanner" style="display: none; margin-top: 8px; padding: 8px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); font-size: 11px;">
+                  <div style="display: flex; align-items: center; gap: 6px; color: var(--accent-emerald); font-weight: 600;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>Pure 1:1 Pixel Conversion Active</span>
+                  </div>
+                  <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 3px; line-height: 1.35;">
+                    Integer grid and source palette preserved. Shading, blending and quantization are bypassed. Clean Edge Purifier can restore edge colors; turn it off for unchanged sampled colors.
+                  </div>
+                </div>
+
+                <!-- JPEG Format Lossy Notice Banner -->
+                <div id="msJpegNoticeBanner" style="display: none; margin-top: 8px; padding: 8px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px;">
+                  <div style="display: flex; align-items: center; gap: 6px; color: var(--accent-amber, #f59e0b); font-weight: 600;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span>JPEG Source Detected</span>
+                  </div>
+                  <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 3px; line-height: 1.35;">
+                    Source image is JPEG with compression artifacts. PNG or lossless formats are recommended for 100% bitwise pixel-perfect vectors.
+                  </div>
+                </div>
+
+
+                <select id="msSourceArtTypeSelect" style="display: none;">
+                  <option value="normal" selected>Normal Image / Photo (Continuous Shading)</option>
+                  <option value="already-pixel-art">Already Pixel Art (Exact 1:1 Cell Preservation)</option>
+                </select>
+              </div>
+
+              <div class="control-group" id="msStrategySection" style="display: none;">
+                <div class="control-label-row"><span class="control-label">Mosaic Strategy</span></div>
+                <select id="msMosaicStrategySelect">
+                  <option value="default-pixel-art" selected>Default Pixel Art</option>
+                </select>
+                <div id="msStrategyDesc" style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                  Existing default Pixel Art Mosaic processing.
+                </div>
+                <div id="msStrategyRecBadge" style="display: none; font-size: 11px; margin-top: 6px; padding: 4px 8px; border-radius: 4px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                </div>
+
+                <!-- Dedicated Interactive Strategy Sub-Controls -->
+                <div id="msStrategyControls" style="display: none; margin-top: 10px; padding: 10px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 6px;">
+                  <!-- Island Grid Controls -->
+                  <div id="msCtrlIslandGrid" style="display: none;">
+                    <div class="control-label-row">
+                      <span class="control-label">Min Island Size</span>
+                      <span class="control-value" id="msIslandSizeVal">4 px</span>
+                    </div>
+                    <input type="range" id="msIslandSizeSlider" min="2" max="64" value="4" style="width: 100%;">
+                    <div class="control-label-row" style="margin-top: 8px;">
+                      <span class="control-label">Island Proximity</span>
+                      <span class="control-value" id="msIslandProxVal">4 px</span>
+                    </div>
+                    <input type="range" id="msIslandProxSlider" min="0" max="32" value="4" style="width: 100%;">
+                  </div>
+
+                  <!-- Orthogonal Contour Controls -->
+                  <div id="msCtrlOrthogonal" style="display: none;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; cursor: pointer;">
+                      <input type="checkbox" id="msOrthogonalCollinearToggle" checked>
+                      <span>Collinear Path Merge</span>
+                    </label>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                      Merges contiguous same-color segments into clean 90° orthogonal vector bands.
+                    </div>
+                  </div>
+
+                  <!-- Adaptive Quadtree Controls -->
+                  <div id="msCtrlQuadtree" style="display: none;">
+                    <div class="control-label-row">
+                      <span class="control-label">Min Cell Size</span>
+                      <span class="control-value" id="msQuadtreeMinVal">2 px</span>
+                    </div>
+                    <select id="msQuadtreeMinSelect" style="width: 100%; margin-bottom: 8px;">
+                      <option value="1">1 × 1 px (Ultra Fine)</option>
+                      <option value="2" selected>2 × 2 px (Fine Detail)</option>
+                      <option value="4">4 × 4 px (Medium)</option>
+                      <option value="8">8 × 8 px (Coarse)</option>
+                    </select>
+                    <div class="control-label-row">
+                      <span class="control-label">OKLab Variance Sensitivity</span>
+                      <span class="control-value" id="msQuadtreeVarVal">15</span>
+                    </div>
+                    <input type="range" id="msQuadtreeVarSlider" min="5" max="60" value="15" style="width: 100%;">
+                  </div>
+
+                  <!-- Native Integer Resampler Controls -->
+                  <div id="msCtrlResampler" style="display: none;">
+                    <div class="control-label-row">
+                      <span class="control-label">Target Integer Scale</span>
+                    </div>
+                    <select id="msResamplerScaleSelect" style="width: 100%;">
+                      <option value="auto" selected>Auto-Detect Native Scale</option>
+                      <option value="2">2 × Scale (2px)</option>
+                      <option value="3">3 × Scale (3px)</option>
+                      <option value="4">4 × Scale (4px)</option>
+                      <option value="6">6 × Scale (6px)</option>
+                      <option value="8">8 × Scale (8px)</option>
+                      <option value="16">16 × Scale (16px)</option>
+                    </select>
+                    <div id="msResamplerDetectedBadge" style="font-size: 11px; margin-top: 6px; color: var(--accent-primary);"></div>
+                  </div>
+
+                  <!-- Perceptual Isoline Banded Controls -->
+                  <div id="msCtrlIsolineBanded" style="display: none;">
+                    <div class="control-label-row">
+                      <span class="control-label">Gradient Isoline Bands</span>
+                      <span class="control-value" id="msIsolineBandsVal">12</span>
+                    </div>
+                    <input type="range" id="msIsolineBandsSlider" min="4" max="32" value="12" style="width: 100%;">
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                      Quantizes sky & atmospheric lighting gradients into smooth, clean harmonic bands.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Grid & Geometry Section -->
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Mosaic Geometry</span>
+                <span class="section-badge">Vector Shapes</span>
+              </div>
+              <div class="control-group" id="msTileSizeGroup">
+                <div class="control-label-row">
+                  <span class="control-label">Tile Size</span>
+                  <span class="control-value" id="msSizeVal">16 px</span>
+                </div>
+                <select id="msSizePresetSelect" style="margin-bottom: 8px;">
+                  <option value="8">8 × 8 (8 px)</option>
+                  <option value="16" selected>16 × 16 (16 px - Default)</option>
+                  <option value="32">32 × 32 (32 px)</option>
+                  <option value="64">64 × 64 (64 px)</option>
+                  <option value="128">128 × 128 (128 px)</option>
+                  <option value="256">256 × 256 (256 px)</option>
+                  <option value="512">512 × 512 (512 px)</option>
+                  <option value="custom">Custom</option>
+                </select>
+                <input type="range" id="msSizeSlider" min="2" max="512" step="1" value="16">
+                <select id="msPixelArtTileModeSelect" style="margin-bottom: 8px; display: none;" title="Auto detects the image's true pixel grid. Manual uses a fixed grid (legacy behavior).">
+                  <option value="auto" selected>Auto (detect true grid)</option>
+                  <option value="8">8 px (manual)</option>
+                  <option value="12">12 px (manual)</option>
+                  <option value="16">16 px (manual)</option>
+                  <option value="24">24 px (manual)</option>
+                  <option value="32">32 px (manual)</option>
+                  <option value="48">48 px (manual)</option>
+                  <option value="64">64 px (manual)</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row"><span class="control-label">Tile Shape</span></div>
+                <select id="msShapeSelect">
+                  <option value="square" selected>Square</option>
+                  <option value="circle">Circle / Stud</option>
+                  <option value="triangle">Triangle</option>
+                  <option value="hexagon">Hexagon</option>
+                  <option value="diamond">Diamond</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Tile Spacing</span>
+                  <span class="control-value" id="msSpacingVal">0 px</span>
+                </div>
+                <input type="range" id="msSpacingSlider" min="0" max="32" step="1" value="0">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Rotation</span>
+                  <span class="control-value" id="msRotationVal">0°</span>
+                </div>
+                <input type="range" id="msRotationSlider" min="0" max="360" step="5" value="0">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row"><span class="control-label">Stagger Layout</span></div>
+                <select id="msStaggerSelect">
+                  <option value="none" selected>None (Standard Grid)</option>
+                  <option value="row">Row Offset (50% Stagger)</option>
+                  <option value="column">Column Offset (50% Stagger)</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label class="checkbox-row" title="Remove unused transparent or removed Mosaic margins while preserving complete tile boundaries">
+                  <input type="checkbox" id="msFitDocumentToggle" checked>
+                  <span>Fit Document to Design</span>
+                </label>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Auto-crops empty Mosaic margins without cutting design cells.</div>
+              </div>
+              <div class="control-group" id="msSamplingGroup">
+                <div class="control-label-row"><span class="control-label">Sampling Method</span></div>
+                <select id="msSamplingSelect">
+                  <option value="perceptual-oklab" selected>OKLab Perceptual (Gradient Weighted)</option>
+                  <option value="contrast-aware">Contrast-Aware Edge Preserving</option>
+                  <option value="gaussian-weighted">2D Gaussian Footprint (Ultra-Smooth)</option>
+                  <option value="average">Standard Average (Uniform Box)</option>
+                </select>
+              </div>
+            </section>
+
+            <!-- Color & Dithering Section -->
+            <section class="sidebar-section" id="msColorPaletteSection">
+              <div class="section-header">
+                <span class="section-title">Color & Palette</span>
+                <span class="section-badge">OKLab</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row"><span class="control-label">Palette Preset</span></div>
+                <select id="msPaletteSelect">
+                  <option value="original-rgb" selected>Original RGB (Full Color)</option>
+                  <option value="pico-8">PICO-8 (16 Colors)</option>
+                  <option value="gameboy">Game Boy (4 Colors)</option>
+                  <option value="c64">Commodore 64 (16 Colors)</option>
+                  <option value="nes-54">NES Classic (54 Colors)</option>
+                  <option value="lego-studs-40">Lego Studs (40 Colors)</option>
+                  <option value="cyberpunk">Cyberpunk Neon (16 Colors)</option>
+                  <option value="pastel">Pastel Dreams (16 Colors)</option>
+                  <option value="solar8">Solar 8 (8 Colors)</option>
+                  <option value="endesga32">EDG 32 (32 Colors)</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row"><span class="control-label">Dithering</span></div>
+                <select id="msDitherSelect">
+                  <option value="none" selected>None (Direct Quantize)</option>
+                  <option value="floyd-steinberg">Floyd-Steinberg (Error Diffusion)</option>
+                  <option value="atkinson">Atkinson (Mac Classic)</option>
+                  <option value="bayer-4x4">Bayer 4x4 (Ordered Grid)</option>
+                  <option value="bayer-8x8">Bayer 8x8 (Fine Ordered)</option>
+                </select>
+              </div>
+              <div class="control-group" style="margin-top: 12px;">
+                <div class="control-label-row">
+                  <span class="control-label">Active Palette Swatches</span>
+                  <span class="control-value" id="msPaletteColorCount">0 colors</span>
+                </div>
+                <div class="palette-grid" id="msPaletteSwatchesGrid"></div>
+              </div>
+            </section>
+
+
+
+
+            <!-- Dedicated Mosaic Trim Section (Illustrator-Inspired Cell-Level Trim) -->
+            <section class="sidebar-section" id="msTrimSection">
+              <div class="section-header">
+                <span class="section-title" style="display: flex; align-items: center; gap: 6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Mosaic Trim
+                </span>
+                <span class="section-badge" id="msTrimStatusBadge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald);">Active</span>
+              </div>
+              <div class="control-group">
+                <div class="toggle-preset-box">
+                  <div class="toggle-preset-info">
+                    <span class="toggle-preset-title">Enable Mosaic Trim</span>
+                    <span class="toggle-preset-subtitle">Cell-level Illustrator trim outside boundary</span>
+                  </div>
+                  <label class="switch-toggle" title="Enable discrete cell-level Mosaic Trim">
+                    <input type="checkbox" id="msTrimToggle" checked>
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div id="msTrimOptionsBox" style="display: block;">
+                <div class="edge-options-box">
+                  <label class="checkbox-row" title="100% preserves all occupied design cells inside the silhouette">
+                    <input type="checkbox" id="msTrimPreserveDesignCheck" checked>
+                    <span>Preserve Design Cells</span>
+                  </label>
+                  <label class="checkbox-row" title="Preserves all horizontal, vertical, and stepped boundary cells">
+                    <input type="checkbox" id="msTrimPreserveBoundaryCheck" checked>
+                    <span>Preserve Boundaries</span>
+                  </label>
+                  <label class="checkbox-row" title="Preserves both convex outer corners and concave inner notches">
+                    <input type="checkbox" id="msTrimPreserveCornersCheck" checked>
+                    <span>Preserve Corners (Convex & Concave)</span>
+                  </label>
+                  <label class="checkbox-row" title="Preserves 1-cell wide features, isolated strips, and narrow projections">
+                    <input type="checkbox" id="msTrimPreserveThinCheck" checked>
+                    <span>Preserve Thin Features (1-cell width)</span>
+                  </label>
+                </div>
+                <div class="toggle-preset-box mt-2">
+                  <div class="toggle-preset-info">
+                    <span class="toggle-preset-title">Preview Trim Boundary</span>
+                    <span class="toggle-preset-subtitle">Cyan dashed silhouette overlay</span>
+                  </div>
+                  <label class="switch-toggle" title="Preview the calculated trim boundary outline">
+                    <input type="checkbox" id="msTrimPreviewToggle">
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </section>
+
+            <!-- Dedicated Mosaic Background Removal / Subject Isolation Section -->
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/>
+                  </svg>
+                  Remove Background
+                </span>
+                <span class="section-badge" id="msBgStatusBadge">None</span>
+              </div>
+
+              <!-- Detection & Removal Group -->
+              <div class="mosaic-subgroup-header">
+                <span class="mosaic-subgroup-title">Detection & Removal</span>
+              </div>
+
+              <!-- Removal Mode Selection Pills -->
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Removal Filter</span>
+                </div>
+                <div class="filter-pill-group" id="msBgModeGroup">
+                  <button type="button" class="filter-pill-btn active" data-mode="none" title="Keep all colors intact">None (Keep All)</button>
+                  <button type="button" class="filter-pill-btn" data-mode="white" title="Remove white and bright background tiles">Remove White</button>
+                  <button type="button" class="filter-pill-btn" data-mode="black" title="Remove black and dark background tiles">Remove Black</button>
+                  <button type="button" class="filter-pill-btn" data-mode="custom" title="Remove custom selected color">Pick Color</button>
+                </div>
+              </div>
+
+              <!-- Color Tolerance / Noise Matching Slider & Presets -->
+              <div class="control-group" id="msToleranceSection">
+                <div class="control-label-row">
+                  <span class="control-label">Color Tolerance (Noise Matching)</span>
+                  <span class="control-value" id="msToleranceVal">10%</span>
+                </div>
+                <input type="range" id="msToleranceSlider" min="0" max="60" step="1" value="10" title="Adjust color distance tolerance for near-identical background noise">
+                <div class="filter-pill-group mt-1" id="msTolerancePresets">
+                  <button type="button" class="filter-pill-btn" data-tol="0" title="Exact single color match only">0% (Exact)</button>
+                  <button type="button" class="filter-pill-btn" data-tol="5" title="Strict edge match (5%)">5% (Strict)</button>
+                  <button type="button" class="filter-pill-btn active" data-tol="10" title="Clean background removal (10%)">10% (Clean)</button>
+                  <button type="button" class="filter-pill-btn" data-tol="20" title="Broad background removal (20%)">20% (Broad)</button>
+                </div>
+              </div>
+
+              <!-- Document & Artboard Colors (Dark to Light Serialized Palette) -->
+              <div class="control-group" id="msDocColorsSection">
+                <div class="control-label-row">
+                  <span class="control-label" id="msDocColorsTitle">Document Colors (Dark → Light)</span>
+                  <span class="badge-subtle" id="msDocColorCountBadge">0 Colors</span>
+                </div>
+                <div class="filter-pill-group mb-1" id="msDocColorScopeGroup">
+                  <button type="button" class="filter-pill-btn active" data-scope="outside" id="msScopeOutsideBtn" title="Show outside, border, and outline colors only">Outside / Edge Colors</button>
+                  <button type="button" class="filter-pill-btn" data-scope="inside" id="msScopeInsideBtn" title="Show inside design and artwork colors only">Inside / Edge Colors</button>
+                </div>
+                <div class="doc-palette-actions-row">
+                  <button type="button" class="doc-batch-btn" id="msBatchAutoBgBtn" title="Automatically detect and remove all background color shades around the artboard edges">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                    </svg>
+                    <span>Auto BG</span>
+                  </button>
+                  <button type="button" class="doc-batch-btn" id="msBatchDarkBtn" title="Select and remove all dark background colors (luminance &lt; 20%)">
+                    <span class="doc-batch-icon-dot dark"></span>
+                    <span>All Dark</span>
+                  </button>
+                  <button type="button" class="doc-batch-btn" id="msBatchLightBtn" title="Select and remove all light background colors (luminance &gt; 80%)">
+                    <span class="doc-batch-icon-dot light"></span>
+                    <span>All Light</span>
+                  </button>
+                  <button type="button" class="doc-batch-btn" id="msSortToggleBtn" title="Toggle sort order (Dark to Light / Light to Dark / Frequency)">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/>
+                    </svg>
+                    <span id="msSortLabel">D→L</span>
+                  </button>
+                </div>
+                <div class="doc-colors-grid" id="msDocColorsGrid">
+                  <div class="doc-colors-empty">Load an image to view document colors</div>
+                </div>
+              </div>
+
+              <!-- Active Removal Colors (Multi-Color Support) -->
+              <div class="control-group" id="msActiveColorsSection" style="display: none;">
+                <div class="control-label-row">
+                  <span class="control-label">Active Removal Colors</span>
+                  <button type="button" class="btn-add-color" id="msAddColorBtn" title="Pick another color from canvas to remove">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Add Color</span>
+                  </button>
+                </div>
+                <div class="color-chips-list" id="msActiveColorsList"></div>
+              </div>
+            </section>
+
+            <!-- Dedicated Mosaic 100% Pixel Cleanup & Quality Verification Section -->
+            <section class="sidebar-section" id="msCleanupSection">
+              <div class="section-header">
+                <span class="section-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                  100% Pixel Cleanup
+                </span>
+                <span class="section-badge status-clean" id="msVerificationBadge">100% CLEAN</span>
+              </div>
+
+              <!-- Auto Clean Action -->
+              <div class="control-group" style="display: flex; gap: 6px;">
+                <button type="button" class="doc-batch-btn btn-auto-clean" id="msAutoCleanBtn" style="flex: 1;" title="Run non-destructive automatic pixel cleanup">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>Auto Clean</span>
+                </button>
+                <button type="button" class="doc-batch-btn btn-analyze-edges" id="msAnalyzeEdgesBtn" style="flex: 1;" title="Run edge-by-edge boundary analysis across all individual design objects">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <span>Analyze Edges</span>
+                </button>
+              </div>
+
+              <!-- Manual Correction Tools -->
+              <div class="mosaic-subgroup-header">
+                <span class="mosaic-subgroup-title">Manual Correction Tools</span>
+              </div>
+              <div class="filter-pill-group mb-2" id="msManualToolsGroup">
+                <button type="button" class="filter-pill-btn active" id="msManualRemoveBtn" data-tool="remove" title="Manually remove unwanted cell">Remove</button>
+                <button type="button" class="filter-pill-btn" id="msManualRestoreBtn" data-tool="restore" title="Restore incorrectly removed cell">Restore</button>
+                <button type="button" class="filter-pill-btn" id="msManualProtectBtn" data-tool="protect" title="Protect intentional detail/region">Protect</button>
+              </div>
+
+              <!-- Sensitivity Sliders -->
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Noise Threshold</span>
+                  <span class="control-value" id="msNoiseVal">20%</span>
+                </div>
+                <input type="range" id="msNoiseSlider" min="0" max="50" step="1" value="20" title="Adjust noise detection sensitivity">
+              </div>
+
+              <div class="control-group mt-1">
+                <div class="control-label-row">
+                  <span class="control-label">Edge Sensitivity</span>
+                  <span class="control-value" id="msEdgeSensitivityVal">20%</span>
+                </div>
+                <input type="range" id="msEdgeSensitivitySlider" min="0" max="50" step="1" value="20" title="Adjust boundary edge analysis sensitivity">
+              </div>
+
+              <!-- Quality Verification Checkmarks -->
+              <div class="mosaic-subgroup-header">
+                <span class="mosaic-subgroup-title">Quality Verification</span>
+              </div>
+              <div class="quality-checks-grid" id="msQualityChecksGrid">
+                <div class="quality-check-item" data-check-key="outside" title="Click to enable or disable Outside Noise verification check">
+                  <span class="check-icon pass" id="msCheckOutside">✓</span>
+                  <span class="check-label">Outside Noise</span>
+                </div>
+                <div class="quality-check-item" data-check-key="edges" title="Click to enable or disable Edge Geometry verification check">
+                  <span class="check-icon pass" id="msCheckEdges">✓</span>
+                  <span class="check-label">Edge Geometry</span>
+                </div>
+                <div class="quality-check-item" data-check-key="noise" title="Click to enable or disable Internal Noise verification check">
+                  <span class="check-icon pass" id="msCheckNoise">✓</span>
+                  <span class="check-label">Internal Noise</span>
+                </div>
+                <div class="quality-check-item" data-check-key="protection" title="Click to enable or disable Protection verification check">
+                  <span class="check-icon pass" id="msCheckProtection">✓</span>
+                  <span class="check-label">Protection</span>
+                </div>
+                <div class="quality-check-item" data-check-key="zeroColorLoss" title="Click to enable or disable Zero Color Loss verification check">
+                  <span class="check-icon pass" id="msCheckZeroColorLoss">✓</span>
+                  <span class="check-label">Zero Color Loss</span>
+                </div>
+                <div class="quality-check-item" data-check-key="gridAlignment" title="Click to enable or disable Grid Alignment verification check">
+                  <span class="check-icon pass" id="msCheckGridAlignment">✓</span>
+                  <span class="check-label">Grid Alignment</span>
+                </div>
+                <div class="quality-check-item" data-check-key="designBoundaries" style="grid-column: span 2;" title="Click to enable or disable Design Boundaries verification check">
+                  <span class="check-icon pass" id="msCheckDesignBoundaries">✓</span>
+                  <span class="check-label">Design Boundaries</span>
+                </div>
+              </div>
+
+              <!-- Single Unified Reset All Button -->
+              <div class="control-group pt-2">
+                <button type="button" class="btn-reset-mosaic-bg" id="msResetAllBtn" title="Reset all background removal colors, filters, and pixel cleanup state to original">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                  </svg>
+                  Reset All Colors, Filters & Cleanup
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <!-- Pencil Controls Panel -->
+          <div class="engine-panel" id="panel-pencil" style="display: none;">
+            <section class="sidebar-section">
+              <div class="section-header">
+                <span class="section-title">Pencil & Annotations</span>
+              </div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Brush / Line Size</span>
+                  <span class="control-value" id="pcSizeVal">3 px</span>
+                </div>
+                <input type="range" id="pcSizeSlider" min="1" max="20" step="1" value="3">
+              </div>
+              <div class="control-group">
+                <div class="control-label-row"><span class="control-label">Stroke Color</span></div>
+                <input type="color" id="pcColorInput" value="#ec4899">
+              </div>
+              <div class="control-group" style="display: flex; gap: 8px;">
+                <button class="btn" id="pcUndoBtn" style="flex: 1;">Undo Stroke</button>
+                <button class="btn" id="pcClearBtn" style="flex: 1;">Clear All</button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Viewport Area -->
+      <div class="app-viewport" id="viewport">
+        <!-- Floating Pixel Editor Tools -->
+        <div class="floating-editor-toolbar" id="pixelToolbar">
+          <button class="tool-btn active" data-tool="pencil" aria-label="Pencil" title="Pencil (1-pixel brush)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+            </svg>
+          </button>
+          <button class="tool-btn" data-tool="eraser" aria-label="Eraser" title="Eraser (clear cell)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/>
+              <path d="M22 21H7"/>
+              <path d="m5 11 9 9"/>
+            </svg>
+          </button>
+          <button class="tool-btn" data-tool="fill" aria-label="Flood Fill" title="Flood Fill (4-way BFS)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/>
+              <path d="m5 2 5 5"/>
+              <path d="M2 13h15"/>
+              <path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/>
+            </svg>
+          </button>
+          <button class="tool-btn" data-tool="picker" aria-label="Eyedropper" title="Eyedropper / Color Picker">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 11 13 5M2 22l5.5-1.5L19.3 8.7a2.12 2.12 0 0 0 0-3L18.3 4.7a2.12 2.12 0 0 0-3 0L3.5 16.5L2 22z"/>
+            </svg>
+          </button>
+          <button class="tool-btn" data-tool="rect" aria-label="Rectangle" title="Draw Rectangle">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+            </svg>
+          </button>
+          <button class="tool-btn" data-tool="line" aria-label="Line" title="Draw Line">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="4" y1="20" x2="20" y2="4"/>
+            </svg>
+          </button>
+          <div class="editor-color-picker-wrapper" title="Active Draw Color">
+            <span class="editor-color-swatch" id="editorColorSwatch" style="background-color: #6366f1;"></span>
+            <input type="color" id="editorColorInput" value="#6366f1" title="Active Draw Color" class="editor-color-input">
+          </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="canvas-container" id="canvasContainer">
+          <!-- Processed Output Canvas -->
+          <canvas class="pixel-canvas" id="outputCanvas"></canvas>
+          <!-- Grid Overlay Canvas (Preview Only) -->
+          <canvas class="grid-overlay-canvas" id="gridOverlayCanvas"></canvas>
+        </div>
+
+        <!-- Before/After Split Line -->
+        <div class="split-divider" id="splitDivider" style="display: none; left: 50%;">
+          <div class="split-handle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="7 8 3 12 7 16"></polyline>
+              <polyline points="17 8 21 12 17 16"></polyline>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Floating Zoom & Grid Overlay Controls -->
+        <div class="floating-zoom-controls">
+          <button class="btn btn-icon-only" id="zoomOutBtn" aria-label="Zoom Out" title="Zoom Out (-)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <span class="zoom-indicator" id="zoomText">100%</span>
+          <button class="btn btn-icon-only" id="zoomInBtn" aria-label="Zoom In" title="Zoom In (+)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button class="btn btn-icon-only" id="zoomFitBtn" aria-label="Fit to Screen" title="Fit to Screen">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+          <button class="btn btn-icon-only" id="zoom100Btn" aria-label="Actual Size 1:1" title="Actual Size 1:1">1:1</button>
+          <div class="zoom-separator"></div>
+          <button class="btn btn-icon-only" id="panToolBtn" aria-label="Pan / Hand Tool" title="Pan / Hand Tool (H) - Drag to navigate all sides of canvas. (Tip: Right-click & drag also pans anytime!)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v5"/>
+              <path d="M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7"/>
+              <path d="M10 10.5V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8"/>
+              <path d="M18 8a2 2 0 0 1 2 2v4a8 8 0 0 1-16 0v-4a2 2 0 0 1 2-2"/>
+            </svg>
+          </button>
+          <button class="btn btn-icon-only" id="toggleGridBtn" aria-label="Toggle Grid Overlay" title="Toggle Grid Overlay (G)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Status Bar -->
+    <footer class="app-statusbar">
+      <div class="statusbar-track">
+        <div class="statusbar-item">
+          <span>Status:</span>
+          <span class="statusbar-tag" id="statusText">Ready</span>
+        </div>
+        <div class="statusbar-item">
+          <span>Artboard:</span>
+          <span class="statusbar-tag" id="statusDocDims">1024 × 576 px</span>
+        </div>
+        <div class="statusbar-item">
+          <span>Stock Resolution:</span>
+          <span class="statusbar-tag" id="statusStockBadge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 600;">0.59 MP (Auto-Fit Available)</span>
+        </div>
+        <div class="statusbar-item">
+          <span>Grid:</span>
+          <span class="statusbar-tag" id="statusGridDims">64 × 36 px</span>
+        </div>
+        <div class="statusbar-item">
+          <span>Colors:</span>
+          <span class="statusbar-tag" id="statusPaletteCount">…</span>
+        </div>
+        <div class="statusbar-item">
+          <span>Background:</span>
+          <span class="statusbar-tag" id="statusBgTag">Transparent</span>
+        </div>
+        <div class="statusbar-item">
+          <span>Cursor:</span>
+          <span class="statusbar-tag" id="statusCursor">X: 0, Y: 0</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Export Modal -->
+    <div class="modal-backdrop" id="exportModal">
+      <div class="modal-window">
+        <div class="modal-header-row">
+          <h2 class="modal-title">Export Artwork</h2>
+          <button class="btn btn-icon-only modal-close-x" id="modalCloseXBtn" aria-label="Close Export Dialog">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <p class="modal-description">Export artwork strictly within the selected document boundaries. True vector SVG generates pure geometry (&lt;rect&gt;, &lt;circle&gt;, &lt;polygon&gt;) with ZERO raster &lt;image&gt; embedding.</p>
+
+        <div class="control-group">
+          <div class="control-label-row"><span class="control-label">Export Format</span></div>
+          <select id="exportFormatSelect">
+            <option value="svg" selected>True Vector SVG (.svg)</option>
+            <option value="png">High-Res PNG (.png)</option>
+            <option value="jpeg">JPEG Image (.jpg)</option>
+          </select>
+        </div>
+
+        <div class="control-group" id="svgOptionsGroup">
+          <div class="control-label-row">
+            <span class="control-label">SVG Structure & Stock Optimization</span>
+            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">Adobe Stock Ready</span>
+          </div>
+          <select id="svgModeSelect">
+            <option value="optimized">⚡ Ultra-Lightweight (Run-length Cell Merging)</option>
+            <option value="editable" selected>✏️ Raw Editable (1 discrete shape per cell)</option>
+          </select>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;" id="svgModeHelpText">
+            ⚠️ 1 discrete shape per cell. High anchor point count for small tile sizes.
+          </div>
+        </div>
+
+        <div class="control-group" id="pngOptionsGroup" style="display: none;">
+          <div class="control-label-row"><span class="control-label">Raster Upscaling Scale</span></div>
+          <select id="pngScaleSelect">
+            <option value="1" selected>1× (Exact Document Resolution)</option>
+            <option value="2">2× Upscale (200%)</option>
+            <option value="4">4× Sharp High-Res (400%)</option>
+            <option value="8">8× Ultra Crisp Master (800%)</option>
+          </select>
+        </div>
+
+        <!-- Auto-Fit Stock Control -->
+        <div class="control-group" id="autoFitStockControlGroup">
+          <button type="button" class="btn" id="autoFitStockBtn" style="width: 100%; border: 1px solid var(--accent-emerald, #10b981); color: var(--accent-emerald, #10b981); background: rgba(16, 185, 129, 0.1); font-weight: 600; padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>📐 1-Click Auto-Fit Stock Scale (Min 4.0 MP)</span>
+          </button>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px; text-align: center;" id="autoFitStockHelpText">
+            Uniformly upscales export resolution to 4.0+ Megapixels with zero cropping and locked aspect ratio.
+          </div>
+        </div>
+
+        <!-- Transparency Checkbox inside Modal -->
+        <div class="control-group" id="modalBgControlGroup">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+            <input type="checkbox" id="exportTransparentBg" checked style="width: auto;">
+            Transparent Background (No background rectangle)
+          </label>
+        </div>
+
+        <!-- JPEG Notice -->
+        <div id="jpegNotice" style="display: none; padding: 10px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-sm); font-size: 12px; color: #fef08a; margin-bottom: 12px;">
+          ⚠️ JPEG does not support transparent backgrounds. A background color will be applied.
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn" id="closeExportModalBtn">Cancel</button>
+          <button class="btn btn-primary" id="downloadExportBtn">Download File</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketplace Safe Check Modal -->
+    <div class="modal-backdrop" id="safeCheckModal">
+      <div class="modal-window">
+        <div class="modal-header-row">
+          <h2 class="modal-title">🛡️ Marketplace Safe Check</h2>
+          <button class="btn btn-icon-only modal-close-x" id="safeCheckCloseXBtn" aria-label="Close Safe Check Dialog">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <p class="modal-description" id="safeCheckDisclaimer" style="font-style: italic; font-size: 12px; color: var(--text-secondary); margin-bottom: 14px; border-left: 2px solid var(--accent-cyan); padding-left: 10px;">
+          Marketplace Safe Check — Helps identify common intellectual-property, branding, safety, and export issues. Final marketplace acceptance is determined by the stock marketplace.
+        </p>
+
+        <div id="safeCheckResults" style="margin-bottom: 18px; max-height: 200px; overflow-y: auto;">
+          <div style="color: var(--accent-emerald); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+            <span>✓</span> Document geometry strictly contained inside artboard boundaries.
+          </div>
+          <div style="color: var(--accent-emerald); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+            <span>✓</span> Zero hidden raster &lt;image&gt; tags in SVG. Pure vector geometry.
+          </div>
+          <div style="color: var(--accent-emerald); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+            <span>✓</span> No automatic background rect baked in transparent mode.
+          </div>
+        </div>
+
+        <div class="modal-actions" style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary" id="modalAutoFitStockBtn" style="flex: 1; border: 1px solid var(--accent-emerald); color: var(--accent-emerald);">📐 Auto-Fit to 4.0+ MP</button>
+          <button class="btn btn-primary" id="closeSafeCheckModalBtn" style="flex: 1;">Got it</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+FINAL PIXEL GRID MASTER — v6 (PRODUCTION PROMPT)
+PRECISION 1-BIT MODULAR RETRO PIXEL ART SYSTEM
+
+ROLE & OBJECTIVE:
+Act as an expert retro pixel artist and UI systems designer. Create a clean, sharp, authentic pixel-art design of:
+[DESIGN NAME / ASSET LIST]
+
+==================================================
+01 — RESOLUTION & MODULAR GRID HIERARCHY
+==================================================
+Apply a unified nearest-neighbor square pixel matrix across the entire canvas. Elements must snap to standard modular pixel boundaries:
+- 8 × 8 Grid Units: Reserved for micro-details, bitmap glyphs, alphanumeric fonts, and status indicators.
+- 16 × 16 Grid Units: Standard bounding box for primary icons, items, badges, and isolated sprites.
+- 32 × 32 (or modular multiples like 48×32): Reserved for application windows, search bars, compound containers, and hero frames.
+
+ABSOLUTE PIXEL SCALE INTEGRITY (ZERO MIXELS):
+- 1 native canvas pixel = 1 design pixel. Every outline, stroke, font line, and border across the entire image must share the EXACT same pixel thickness (1-pixel or uniform 2-pixel strokes).
+- Strictly NO mixed pixel sizes. Small objects and large objects must exist on the exact same resolution grid.
+
+==================================================
+02 — PIXEL PURITY & HARD-EDGE CONTROL
+==================================================
+- ZERO Anti-Aliasing: Hard, discrete, opaque transitions only. No intermediate gray pixels, no partial opacity, no feathered contours.
+- Staircase Geometry: All curves and 45-degree diagonals must use disciplined mathematical stair-stepping (e.g., 3-2-1-1-2-3 or 2-1-1-2 rhythms).
+- No Doubles or Jaggies: Eliminate redundant L-shaped clusters along diagonals and accidental orphan pixels.
+- Drop Shadows: If depth is used, apply a uniform, hard-offset pixel shadow (e.g., 2 pixels down, 2 pixels right) with solid fill and zero blur.
+
+==================================================
+03 — PALETTE & COLOR DISCIPLINE
+==================================================
+- Foreground: Pure high-contrast 1-bit style using strictly Pure White (#FFFFFF) and Pure Black (#000000).
+- Background: Solid, flat [SELECT: Pure Yellow #FFCC00 / Pure White #FFFFFF / Pure Black #000000].
+- Isolation: The background must be completely flat with edge-to-edge coverage, zero gradients, zero vignettes, and zero glow halos touching the perimeter.
+
+==================================================
+04 — AESTHETIC & SHAPE LANGUAGE
+==================================================
+- Tidy, charming, iconic visual metaphors with strong negative space.
+- Simplified silhouettes: Prioritize instant readability over micro-texture.
+- Uniform spacing and alignment between grouped UI items, icons, and text labels.
+- Presentation: Clean, client-ready sprite sheet layout with ample breathing room.
